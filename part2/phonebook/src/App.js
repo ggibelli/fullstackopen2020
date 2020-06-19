@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Person from './components/Person'
+import Notification from './components/Notification'
 
 import phoneService from './services/Phonebook'
 
@@ -10,6 +11,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ newFilter, setFilter ] = useState('')
+  const [ browserMessage, setBrowserMessage ] = useState({message:'', type:''})
 
   const hook = () => {
     phoneService
@@ -18,7 +20,6 @@ const App = () => {
         setPersons(initialNumbers)
       })
   }
-
   useEffect(hook, [])
 
   const addPerson = (event) => {
@@ -34,12 +35,18 @@ const App = () => {
         .update(person.id, personObject)
         .then(returnedPerson =>{
           setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
+          setNewName('')
+          setNewNumber('')
         })
         .catch(error => {
-          alert(
-            `the person '${person.name}' was already deleted from the server`
-          )
+          setBrowserMessage({message:
+            `the person '${person.name}' was already deleted from the server`, type: 'error'
+          })
+          setTimeout(() => {
+            setBrowserMessage({message:'', type:''})
+          }, 5000)
           setPersons(persons.filter(p => p.id !== person.id))
+          
         })
       }
       else {
@@ -55,7 +62,13 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         }) 
-    }   
+    }  
+    setBrowserMessage({message:
+      `Added '${newName}'`, type: 'success'
+    })
+    setTimeout(() => {
+      setBrowserMessage({message:'', type:''})
+    }, 5000) 
   }
 
   const deletePerson = (person) => {
@@ -63,9 +76,12 @@ const App = () => {
       .deletePerson(person.id)
       .then(hook)
       .catch(error => {
-        alert(
-          `the person '${person.name}' was already deleted from the server`
-        )
+        setBrowserMessage({message:
+          `the person '${person.name}' was already deleted from the server`, type: 'error'
+        })
+        setTimeout(() => {
+          setBrowserMessage({message:'', type:''})
+        }, 5000)
         setPersons(persons.filter(p => p.id !== person.id))
       })
   }
@@ -90,6 +106,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={browserMessage} />
       <Filter filter={newFilter} handleFilter={handleFilter} />
       <h3>Add a new</h3>
       <PersonForm addPerson={addPerson} addInputs={handleInputs}/>
