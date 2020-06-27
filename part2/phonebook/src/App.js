@@ -40,12 +40,12 @@ const App = () => {
         })
         .catch(error => {
           setBrowserMessage({message:
-            `the person '${person.name}' was already deleted from the server`, type: 'error'
+            error.response.data.error, type: 'error'
           })
           setTimeout(() => {
             setBrowserMessage({message:'', type:''})
           }, 5000)
-          setPersons(persons.filter(p => p.id !== person.id))
+          setPersons(persons)
           
         })
       }
@@ -57,18 +57,31 @@ const App = () => {
     else {
       phoneService
         .create(personObject)
-        .then(returnedBook => {
-          setPersons(persons.concat(returnedBook))
+        .then(createdPerson => {
+          setPersons(persons.concat(createdPerson))
           setNewName('')
           setNewNumber('')
+          setBrowserMessage({message:
+            `Added '${newName}'`, type: 'success'
+          })
+          setTimeout(() => {
+            setBrowserMessage({message:'', type:''})
+          }, 5000) 
         }) 
+        .catch(error => {
+          console.log(error.response.data)
+          setBrowserMessage({message:
+            error.response.data.error, type: 'error'
+          })
+          setTimeout(() => {
+            setBrowserMessage({message:'', type:''})
+          }, 5000)
+          setPersons(persons)
+          
+        })
+        
     }  
-    setBrowserMessage({message:
-      `Added '${newName}'`, type: 'success'
-    })
-    setTimeout(() => {
-      setBrowserMessage({message:'', type:''})
-    }, 5000) 
+    
   }
 
   const deletePerson = (person) => {
