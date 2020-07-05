@@ -1,9 +1,10 @@
 POST http://localhost:3003/api/blogs
 content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imdpb3Zhbm5pMTIzIiwiaWQiOiI1ZjAwMzlhNWZkYjQzYzA0ZjE2ZjAwMWQiLCJpYXQiOjE1OTM4NTAyODd9.BMgjeRIeED4Yqn15ynPWEa3JWofSMaF-kG8NusX28DI
 
 {
-    "title": "nuovo blog",
-    "author": "bobollo",
-    "url": "www.bl0og1.com",
-    "likes": 2350
+    "title": "funziaaaa???",
+    "author": "giovanni91",
+    "url": "wwww.oarasi.gg",
+    "likes": 10
 }

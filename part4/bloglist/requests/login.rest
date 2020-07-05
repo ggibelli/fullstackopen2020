@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/login
+content-type: application/json
+
+{
+    "username": "giovanni123",
+    "password": "giovanni91"
+}
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imdpb3Zhbm5pMTIzIiwiaWQiOiI1ZjAwMzlhNWZkYjQzYzA0ZjE2ZjAwMWQiLCJpYXQiOjE1OTM4NTAyODd9.BMgjeRIeED4Yqn15ynPWEa3JWofSMaF-kG8NusX28DI
