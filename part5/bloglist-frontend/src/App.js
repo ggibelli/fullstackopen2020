@@ -109,7 +109,7 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.clear()
-    window.location.reload(false)
+    setUser(null)
   }
 
   const handleInputsLoginForm = [
