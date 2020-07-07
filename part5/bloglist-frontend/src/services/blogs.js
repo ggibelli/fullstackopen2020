@@ -19,13 +19,18 @@ const getAll = () => {
 }
 
 const create = async newObject => {
-  setConfig()
   const response = await axios.post(baseUrl, newObject, setConfig())
   return response.data
 }
 
-//const update = async newObject => {
-  //const config = {}
-//}
+const update = async (id, newObject) => {
+  const response = await axios.put(`${baseUrl}/${id}`, newObject, setConfig())
+  return response.data
+}
 
-export default { getAll, create, setToken }
+const remove = async id => {
+  const response = await axios.delete(`${baseUrl}/${id}`, setConfig())
+  return response.data
+}
+
+export default { getAll, create, setToken, update, remove }

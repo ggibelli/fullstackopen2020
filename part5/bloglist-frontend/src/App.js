@@ -33,27 +33,50 @@ const App = () => {
     }
   }, [])
 
+  const notifyWith = (message, type='success') => {
+    setBrowserMessage({ message, type })
+    setTimeout(() => {
+      setBrowserMessage(null)
+    }, 5000)
+  }
+
   const addBlog = async (blogObject) => {
     BlogFormRef.current.toggleVisibility()
     try {
       const returnedBlog = await blogService.create(blogObject)
 
       setBlogs(blogs.concat(returnedBlog))
-      setBrowserMessage({ message:
-        `A new blog '${returnedBlog.title}' by ${returnedBlog.author}`, type: 'success'
-      })
-      setTimeout(() => {
-        setBrowserMessage({ message:'', type:'' })
-      }, 5000)
-
+      notifyWith(`A new blog '${returnedBlog.title}' by ${returnedBlog.author}`)
     } catch (exception) {
-      setBrowserMessage({ message:
-      exception.response.data.error, type: 'error'
-      })
-      setTimeout(() => {
-        setBrowserMessage({ message:'', type:'' })
-      }, 5000)
+      notifyWith(`${exception.response.data.error}`, 'error')
       setBlogs(blogs)
+    }
+  }
+
+  const handleLikes = async (id) => {
+    const blog = blogs.find(blog => blog.id === id)
+    const likedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id }
+    try {
+      const returnedBlog = await blogService.update(id, likedBlog)
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : { ...returnedBlog, user: blog.user }))
+    } catch (exception) {
+      notifyWith(`${exception.response.data.error}`, 'error')
+      setBlogs(blogs)
+    }
+  }
+
+  const deleteBlog = async (id) => {
+    const toDelete = blogs.find(b => b.id === id)
+    const ok = window.confirm(`Delete ${toDelete.title}`)
+    if (ok) {
+      try {
+        await blogService.remove(id)
+        setBlogs(blogs.filter(b => b.id !== id))
+        notifyWith(`Deleted ${toDelete.title}`)
+      } catch (exception) {
+        setBlogs(blogs.filter(b => b.id !== id))
+        notifyWith(`${toDelete.title} had already been removed`, 'error')
+      }
     }
   }
 
@@ -67,19 +90,11 @@ const App = () => {
       )
       blogService.setToken(user.token)
       setUser(user)
-      setBrowserMessage({ message:
-        `${username} successfully loggedin`, type: 'success'
-      })
-      setTimeout(() => {
-        setBrowserMessage({ message:'', type:'' })
-      }, 5000)
+      notifyWith(`${username} successfully loggedin`)
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setBrowserMessage({ message:'Wrong credentials', type: 'error' })
-      setTimeout(() => {
-        setBrowserMessage({ message:'', type:'' })
-      }, 5000)
+      notifyWith('Wrong credentials', 'error')
     }
   }
 
@@ -88,14 +103,16 @@ const App = () => {
     setUser(null)
   }
 
+  const sortedBlogs = blogs.sort((a, b) => a.likes - b.likes).reverse()
+
   const loggedPage = () => (
     <>
       <p>{user.name} logged-in <button onClick={handleLogout}>logout</button></p>
       <Togglable buttonLabel="new blog post" ref={BlogFormRef}>
         <BlogForm createBlog={addBlog} />
       </Togglable>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+      {sortedBlogs.map(blog =>
+        <Blog key={blog.id} blog={blog} handleLikes={handleLikes} handleDelete={deleteBlog} />
       )}
     </>
   )
