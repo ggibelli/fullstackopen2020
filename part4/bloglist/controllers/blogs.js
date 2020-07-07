@@ -21,20 +21,13 @@ blogsRouter.get('/:id', async (req, res) => {
 })
 
 blogsRouter.post('/', async (req, res) => {
-  const body = req.body
+  const blog  = new Blog(req.body)
   const decodedToken = jwt.verify(req.token, config .SECRET)
   if (!req.token || !decodedToken.id) {
     return res.status(401).json({ error: 'token missing or invalid' })
   }
   const user = await User.findById(decodedToken.id)
-  const blog = new Blog({
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes,
-    user: user._id
-  })
-
+  blog.user = user
   const savedBlog = await blog.save()
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
@@ -54,20 +47,14 @@ blogsRouter.delete('/:id', async (req, res) => {
     return res.status(401).json({ error: 'only blog creator can remove blog' })
   }
 
-  await Blog.findByIdAndDelete(blog.id)
-  Blog.findOneAndDelete()
+  await blog.remove()
+  user.blogs = user.blogs.filter(blog => blog.id.toString() !== req.params.id.toString())
+  await user.save()
   res.status(204).end()
 })
 
 blogsRouter.put('/:id', async (req, res) => {
-  const body = req.body
-
-  const blog = {
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes
-  }
+  const blog = req.body
 
   const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, blog, { new: true })
   res.json(updatedBlog.toJSON())
