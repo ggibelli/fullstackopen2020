@@ -27,7 +27,8 @@ test('<BlogForm /> updates parent state and calls onSubmit', () => {
     target: { value: 'www.woooow.com' }
   })
   fireEvent.submit(form)
-  const newBlog = { title: 'New blog', author: 'Myself', url: 'www.woooow.com' }
   expect(createBlog.mock.calls).toHaveLength(1)
-  expect(createBlog.mock.calls[0][0]).toStrictEqual(newBlog)
+  expect(createBlog.mock.calls[0][0].title).toBe('New blog')
+  expect(createBlog.mock.calls[0][0].author).toBe('Myself')
+  expect(createBlog.mock.calls[0][0].url).toBe('www.woooow.com')
 })
