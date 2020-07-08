@@ -16,22 +16,25 @@ const Blog = ({ blog, handleLikes, handleDelete }) => {
     marginBottom: 1
   }
   const blogWithDetails = () => (
-    <>
-      <p>{blog.title} {blog.author}<button onClick={hideDetails}>hide</button></p>
-      <p>{blog.url}</p>
-      <p>{blog.likes} <button onClick={() => handleLikes(blog.id)}>like</button></p>
-      <p>{blog.user.username}</p>
+    <div className="blogWithDetails">
+      <p className="titleAndAuthor">{blog.title} {blog.author}<button onClick={hideDetails}>hide</button></p>
+      <p className="url">{blog.url}</p>
+      <p className="likes">{blog.likes} <button onClick={() => handleLikes(blog.id)}>like</button></p>
+      { blog.user
+        ? <p>{blog.user.username}</p>
+        : null
+      }
       <button onClick={() => handleDelete(blog.id)}>remove</button>
-    </>
+    </div>
   )
 
   const blogNoDetails = () => (
-    <>
-      {blog.title} {blog.author} <button onClick={showDetails}>details</button>
-    </>
+    <div className="blogNoDetails">
+      <p>{blog.title} {blog.author} <button onClick={showDetails}>details</button></p>
+    </div>
   )
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       { blogDetailVisible
         ? blogWithDetails()
         : blogNoDetails()
