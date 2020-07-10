@@ -75,7 +75,7 @@ const App = () => {
         notifyWith(`Deleted ${toDelete.title}`)
       } catch (exception) {
         setBlogs(blogs.filter(b => b.id !== id))
-        notifyWith(`${toDelete.title} had already been removed`, 'error')
+        notifyWith(`${exception.response.data.error}`, 'error')
       }
     }
   }

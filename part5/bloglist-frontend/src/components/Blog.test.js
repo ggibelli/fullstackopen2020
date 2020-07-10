@@ -13,7 +13,7 @@ const blog = {
 }
 
 test('renders blog title and blog author of a blog', () => {
-  
+
   const component = render(
     <Blog blog={blog} />
   )
@@ -45,5 +45,4 @@ test('if the like button is clicked twice the event handler returns 5', () => {
   fireEvent.click(buttonLikes)
   fireEvent.click(buttonLikes)
   expect(mockHandler.mock.calls).toHaveLength(2)
-
 })

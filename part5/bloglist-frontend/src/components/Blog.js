@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 
 const Blog = ({ blog, handleLikes, handleDelete }) => {
   const [blogDetailVisible, setBlogDetailVisible] = useState(false)
-  const showDetails = () => {
-    setBlogDetailVisible(true)
-  }
+  const label = blogDetailVisible
+    ? 'hide' : 'details'
+
+  const showWhenVisible = { display: blogDetailVisible ? '' : 'none' }
+
   const hideDetails = () => {
-    setBlogDetailVisible(false)
+    setBlogDetailVisible(!blogDetailVisible)
   }
   const blogStyle = {
     paddingTop: 1,
@@ -15,30 +17,20 @@ const Blog = ({ blog, handleLikes, handleDelete }) => {
     borderWidth: 1,
     marginBottom: 1
   }
-  const blogWithDetails = () => (
-    <div className="blogWithDetails">
-      <p className="titleAndAuthor">{blog.title} {blog.author}<button onClick={hideDetails}>hide</button></p>
-      <p className="url">{blog.url}</p>
-      <p className="likes">{blog.likes} <button onClick={() => handleLikes(blog.id)}>like</button></p>
-      { blog.user
-        ? <p>{blog.user.username}</p>
-        : null
-      }
-      <button onClick={() => handleDelete(blog.id)}>remove</button>
-    </div>
-  )
-
-  const blogNoDetails = () => (
-    <div className="blogNoDetails">
-      <p>{blog.title} {blog.author} <button onClick={showDetails}>details</button></p>
-    </div>
-  )
   return (
     <div style={blogStyle} className="blog">
-      { blogDetailVisible
-        ? blogWithDetails()
-        : blogNoDetails()
-      }
+      <div className="blogWithDetails">
+        <p className="titleAndAuthor">{blog.title} {blog.author}<button onClick={hideDetails}>{label}</button></p>
+      </div>
+      <div style={showWhenVisible}>
+        <p className="url">{blog.url}</p>
+        <p className="likes">likes: {blog.likes} <button id="like" onClick={() => handleLikes(blog.id)}>like</button></p>
+        { blog.user
+          ? <p>{blog.user.username}</p>
+          : null
+        }
+        <button id="remove" onClick={() => handleDelete(blog.id)}>remove</button>
+      </div>
     </div>
   )
 }
