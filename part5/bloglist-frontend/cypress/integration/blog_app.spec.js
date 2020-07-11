@@ -81,9 +81,7 @@ describe('Blog app', function() {
         cy.request('POST', 'http://localhost:3003/api/users/', user)
         cy.login({ username: 'prova', password: 'cypress' })
         cy.contains('second blog').parent().find('button').click()
-        cy.contains('second blog').parent().parent().contains('remove').click()
-        cy.get('html').should('contain', 'second blog cypress')
-        cy.contains('only blog creator can remove blog')
+        cy.contains('second blog').parent().parent().should('not.contain', 'remove')
       })
 
       it('blogs are ordered by likes', function() {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
-const Blog = ({ blog, handleLikes, handleDelete }) => {
+const Blog = ({ blog, handleLikes, handleDelete, myBlog }) => {
   const [blogDetailVisible, setBlogDetailVisible] = useState(false)
   const label = blogDetailVisible
     ? 'hide' : 'details'
@@ -29,9 +30,23 @@ const Blog = ({ blog, handleLikes, handleDelete }) => {
           ? <p>{blog.user.username}</p>
           : null
         }
+        { myBlog &&
         <button id="remove" onClick={() => handleDelete(blog.id)}>remove</button>
+        }
       </div>
     </div>
   )
 }
+
+Blog.propTypes = {
+  blog: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+  }).isRequired,
+  handleLikes: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
+  myBlog: PropTypes.bool.isRequired
+}
+
 export default Blog

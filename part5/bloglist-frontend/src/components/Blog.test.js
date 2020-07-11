@@ -21,7 +21,6 @@ test('renders blog title and blog author of a blog', () => {
   expect(component.container).toHaveTextContent('new blog')
   expect(component.container).toHaveTextContent('John Doe')
   expect(component.container).not.toHaveTextContent('nwww.google.com')
-  expect(component.container).not.toHaveTextContent('10')
 })
 
 test('the show details button shows url and likes of a blog', () => {
