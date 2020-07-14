@@ -1,13 +1,8 @@
 const reducer = (state = '', action) => {
   switch (action.type) {
-  case 'VOTED':
+  case 'NOTIFICATION':
     return {
-      data: `You voted ${action.data}`,
-      visibility: true
-    }
-  case 'ADDED':
-    return {
-      data: `You added ${action.data}`,
+      data: action.data,
       visibility: true
     }
   case 'HIDE':
@@ -20,23 +15,23 @@ const reducer = (state = '', action) => {
   }
 }
 
-export const hideNotification = () => {
+const hideNotification = () => {
   return {
     type: 'HIDE',
   }
 }
 
-export const notificationAnecdote = (anecdote) => {
+const notificationAnecdote = (anecdote) => {
   return {
-    type: 'ADDED',
+    type: 'NOTIFICATION',
     data: anecdote
   }
 }
 
-export const notificationVote = (anecdote) => {
-  return {
-    type: 'VOTED',
-    data: anecdote.content
+export const notificationWithTimeout = (text, time) => {
+  return dispatch => {
+    dispatch(notificationAnecdote(text))
+    setTimeout(() => dispatch(hideNotification()), time * 1000)
   }
 }
 
