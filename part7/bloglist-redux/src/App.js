@@ -21,7 +21,7 @@ import { initializeUsers } from './reducers/userReducer'
 import BlogList from './components/BlogList'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
-import Header from './components/Header'
+import Footer from './components/Footer'
 import UserList from './components/UserList'
 import UserDetail from './components/UserDetail'
 import BlogDetail from './components/BlogDetail'
@@ -124,7 +124,7 @@ const App = () => {
           <BlogList />
         </PrivateRoute>
       </Switch>
-      <Header />
+      <Footer />
     </Container>
   )
 }
