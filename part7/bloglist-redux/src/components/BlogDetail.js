@@ -14,7 +14,7 @@ const BlogDetail = () => {
   const dispatch = useDispatch()
   const currentUser = useSelector(state => state.currentUser)
   const blog = useSelector(({ blogs }) => blogs.find(blog => blog.id === id))
-  
+  console.log('dddd',blog)
   const handleLikeblog = () => {
     const likedBlog = { ...blog, likes: blog.likes + 1 }
     dispatch(likeBlog(likedBlog))
