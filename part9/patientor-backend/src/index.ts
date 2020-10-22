@@ -11,12 +11,11 @@ app.use(express.json());
 const PORT = 3001;
 
 app.get('/api/ping', (_req, res) => {
-  console.log('pinged');
   res.send('pong');
 });
 
 app.use('/api/patients', patientRouter);
-app.use('/api/diagnoses', diagnoseRouter);
+app.use('/api/diagnosis', diagnoseRouter);
 
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);
